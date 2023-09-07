@@ -10,27 +10,41 @@ Los procesadores ARM Cortex-M0, Cortex-M3 y Cortex-M4 pertenecen a la familia de
 ### Cortex-M0:
 
 a. **Eficiencia Energética**: Está diseñado para ser extremadamente eficiente en consumo de energía y tamaño, ideal para dispositivos de bajo costo y bajo consumo de energía.
+
 b. **Conjunto de Instrucciones**: Tiene un conjunto de instrucciones reducido en comparación con otros núcleos Cortex-M.
+
 c. **Arquitectura**: Basado en una arquitectura von Neumann de 32 bits.
+ 
 d. **Rendimiento**: Menor rendimiento comparado con los otros modelos, pero suficiente para tareas simples.
+
 e. **Sin Unidad de Punto Flotante (FPU)**: No tiene capacidad de realizar cálculos de punto flotante de hardware. 
+
 f. **Sin instrucciones SIMD**: Sin Soporte para Instrucciones SIMD (Single Instruction, Multiple Data).
 
 ### Cortex-M3:
 
 a. **Equilibrio**: Ofrece un buen equilibrio entre rendimiento y eficiencia energética. 
+
 b. **Conjunto de Instrucciones**: Tiene un conjunto de instrucciones más extenso que el Cortex-M0, lo que permite una mayor flexibilidad. 
+
 c. **Arquitectura**: También basado en una arquitectura von Neumann de 32 bits. 
+
 d. **Rendimiento**: Mayor rendimiento que el Cortex-M0 debido a características como pipeline de 3 etapas. 
+
 e. **Sin Unidad de Punto Flotante (FPU)**: Al igual que el M0, no tiene FPU. 
+
 f. **Sin instrucciones SIMD**: Sin Soporte para Instrucciones SIMD.
 
 ### Cortex-M4:
 
 a. **Rendimiento**: Está diseñado para aplicaciones que requieren cálculos matemáticos complejos y control digital de señales (DSP). 
+
 b. **Conjunto de Instrucciones**: Aún más extenso, incluye instrucciones SIMD y otras optimizaciones. 
+
 c. **Arquitectura**: También de 32 bits y basado en la arquitectura von Neumann. 
+
 d. **Unidad de Punto Flotante (FPU)**: Opcionalmente, puede incluir una FPU para realizar cálculos de punto flotante de manera más eficiente. 
+
 e. **Instrucciones SIMD**: Soporte para instrucciones SIMD para mejorar el rendimiento en operaciones paralelas.
 
 
