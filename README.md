@@ -1,8 +1,38 @@
 # Preguntas orientadoras
 
 Describa brevemente los diferentes perfiles de familias de microprocesadores/microcontroladores de ARM. Explique alguna de sus diferenciascaracterísticas.
+
 ## Cortex M
 1. Describa brevemente las diferencias entre las familias de procesadores Cortex M0, M3 y M4.
+
+Los procesadores ARM Cortex-M0, Cortex-M3 y Cortex-M4 pertenecen a la familia de procesadores ARM Cortex-M diseñados para sistemas embebidos y dispositivos de baja energía. Aunque comparten muchas características, hay diferencias notables entre ellos:
+
+### Cortex-M0:
+
+a. **Eficiencia Energética**: Está diseñado para ser extremadamente eficiente en consumo de energía y tamaño, ideal para dispositivos de bajo costo y bajo consumo de energía.
+b. **Conjunto de Instrucciones**: Tiene un conjunto de instrucciones reducido en comparación con otros núcleos Cortex-M.
+c. **Arquitectura**: Basado en una arquitectura von Neumann de 32 bits.
+d. **Rendimiento**: Menor rendimiento comparado con los otros modelos, pero suficiente para tareas simples.
+e. **Sin Unidad de Punto Flotante (FPU)**: No tiene capacidad de realizar cálculos de punto flotante de hardware. 
+f. **Sin instrucciones SIMD**: Sin Soporte para Instrucciones SIMD (Single Instruction, Multiple Data).
+
+### Cortex-M3:
+
+a. **Equilibrio**: Ofrece un buen equilibrio entre rendimiento y eficiencia energética. 
+b. **Conjunto de Instrucciones**: Tiene un conjunto de instrucciones más extenso que el Cortex-M0, lo que permite una mayor flexibilidad. 
+c. **Arquitectura**: También basado en una arquitectura von Neumann de 32 bits. 
+d. **Rendimiento**: Mayor rendimiento que el Cortex-M0 debido a características como pipeline de 3 etapas. 
+e. **Sin Unidad de Punto Flotante (FPU)**: Al igual que el M0, no tiene FPU. 
+f. **Sin instrucciones SIMD**: Sin Soporte para Instrucciones SIMD.
+
+### Cortex-M4:
+
+a. **Rendimiento**: Está diseñado para aplicaciones que requieren cálculos matemáticos complejos y control digital de señales (DSP). 
+b. **Conjunto de Instrucciones**: Aún más extenso, incluye instrucciones SIMD y otras optimizaciones. 
+c. **Arquitectura**: También de 32 bits y basado en la arquitectura von Neumann. 
+d. **Unidad de Punto Flotante (FPU)**: Opcionalmente, puede incluir una FPU para realizar cálculos de punto flotante de manera más eficiente. 
+e. **Instrucciones SIMD**: Soporte para instrucciones SIMD para mejorar el rendimiento en operaciones paralelas.
+
 
 2. ¿Por qué se dice que el set de instrucciones Thumb permite mayor densidad de código? Explique
 
@@ -45,3 +75,14 @@ Describa brevemente los diferentes perfiles de familias de microprocesadores/mic
 20. ¿Para qué se suele utilizar la excepción PendSV? ¿Cómo se relaciona su uso con el resto de las excepciones? Dé un ejemplo
 
 21. ¿Para qué se suele utilizar la excepción SVC? Expliquelo dentro de un marco de un sistema operativo embebido.
+
+## ISA
+1. ¿Qué son los sufijos y para qué se los utiliza? Dé un ejemplo
+
+2. ¿Para qué se utiliza el sufijo ‘s’? Dé un ejemplo
+
+3. ¿Qué utilidad tiene la implementación de instrucciones de aritmética saturada? Dé un ejemplo con operaciones con datos de 8 bits.
+
+4. Describa brevemente la interfaz entre assembler y C ¿Cómo se reciben los argumentos de las funciones? ¿Cómo se devuelve el resultado? ¿Qué registros deben guardarse en la pila antes de ser modificados?
+
+5. ¿Qué es una instrucción SIMD? ¿En qué se aplican y que ventajas reporta su uso? Dé un ejemplo.
