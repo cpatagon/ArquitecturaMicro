@@ -3,11 +3,11 @@
 Describa brevemente los diferentes perfiles de familias de microprocesadores/microcontroladores de ARM. Explique alguna de sus diferenciascaracterísticas.
 
 ## Cortex M
- 1. ** Describa brevemente las diferencias entre las familias de procesadores Cortex M0, M3 y M4. **
+### 1. Describa brevemente las diferencias entre las familias de procesadores Cortex M0, M3 y M4
 
 Los procesadores ARM Cortex-M0, Cortex-M3 y Cortex-M4 pertenecen a la familia de procesadores ARM Cortex-M diseñados para sistemas embebidos y dispositivos de baja energía. Aunque comparten muchas características, hay diferencias notables entre ellos:
 
-### Cortex-M0:
+#### Cortex-M0:
 
 a. **Eficiencia Energética**: Está diseñado para ser extremadamente eficiente en consumo de energía y tamaño, ideal para dispositivos de bajo costo y bajo consumo de energía.
 
@@ -21,7 +21,7 @@ e. **Sin Unidad de Punto Flotante (FPU)**: No tiene capacidad de realizar cálcu
 
 f. **Sin instrucciones SIMD**: Sin Soporte para Instrucciones SIMD (Single Instruction, Multiple Data).
 
-### Cortex-M3:
+#### Cortex-M3:
 
 a. **Equilibrio**: Ofrece un buen equilibrio entre rendimiento y eficiencia energética. 
 
@@ -35,7 +35,7 @@ e. **Sin Unidad de Punto Flotante (FPU)**: Al igual que el M0, no tiene FPU.
 
 f. **Sin instrucciones SIMD**: Sin Soporte para Instrucciones SIMD.
 
-### Cortex-M4:
+#### Cortex-M4:
 
 a. **Rendimiento**: Está diseñado para aplicaciones que requieren cálculos matemáticos complejos y control digital de señales (DSP). 
 
@@ -48,20 +48,20 @@ d. **Unidad de Punto Flotante (FPU)**: Opcionalmente, puede incluir una FPU para
 e. **Instrucciones SIMD**: Soporte para instrucciones SIMD para mejorar el rendimiento en operaciones paralelas.
 
 
-2. **¿Por qué se dice que el set de instrucciones Thumb permite mayor densidad de código? Explique **
+### 2. ¿Por qué se dice que el set de instrucciones Thumb permite mayor densidad de código? Explique
 
 El conjunto de instrucciones Thumb en la arquitectura ARM se diseñó con el objetivo de mejorar la densidad del código. Esto significa permitir que el código compilado ocupe menos espacio de memoria sin sacrificar demasiado rendimiento. A continuación se detallan algunas de las razones por las cuales Thumb logra una mayor densidad de código:
 
-### Instrucciones de 16 bits
+#### Instrucciones de 16 bits
 Una de las características más notables del conjunto de instrucciones Thumb es que la mayoría de sus instrucciones son de 16 bits, en lugar de 32 bits como en el conjunto de instrucciones ARM tradicional. Esto significa que se puede almacenar más código en la misma cantidad de espacio de memoria.
 
-### Optimización para Operaciones Comunes
+#### Optimización para Operaciones Comunes
 El conjunto de instrucciones Thumb está optimizado para las operaciones más comunes que se realizan en aplicaciones embebidas y sistemas de baja potencia. Al proporcionar instrucciones más cortas para operaciones frecuentes, se mejora la densidad del código.
 
-### Compatibilidad
+#### Compatibilidad
 Thumb es compatible con el conjunto de instrucciones ARM más grande, lo que permite a los programadores cambiar entre modos ARM y Thumb en tiempo de ejecución. Esto significa que los desarrolladores pueden usar instrucciones ARM de 32 bits para tareas computacionalmente intensivas y luego cambiar a Thumb para las partes del código donde la densidad y la eficiencia son más críticas.
 
-### Menor Ancho de Banda de Memoria
+#### Menor Ancho de Banda de Memoria
 Debido a que las instrucciones son más pequeñas, se requiere menos ancho de banda de memoria para cargarlas, lo que a su vez puede llevar a un sistema más eficiente en términos de energía.
 
 
