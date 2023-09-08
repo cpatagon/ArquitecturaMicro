@@ -94,7 +94,7 @@ a) **Area de Código** Longitud de 512 MB, y sus direcciones van desde  `0x00000
    ii. **Memoria Flash**: Esta es donde generalmente se almacena el código del programa. Usualmente comienza en la dirección `0x08000000` o `0x00000000` dependiendo de la configuración de arranque del sistema.
 	
 
-![Drag Racing](mapMemori_primer.png)
+![Mapa de Memoria](fig/mapMemori_primer.png)
   
 2. **Memoria RAM**: Utilizada para datos y almacenamiento temporal durante la ejecución del programa. Comúnmente comienza en direcciones como `0x20000000`.
   
