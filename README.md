@@ -83,9 +83,13 @@ Estas instrucciones estarían presentes en arquitecturas más complejas que perm
 
 #### Mapa de Memoria de la Familia ARM Cortex-M
 
-La familia de procesadores ARM Cortex-M posee un mapa de memoria uniforme y bien definido, lo que facilita la portabilidad del código y la consistencia en el diseño de sistemas embebidos. Aunque puede haber variaciones específicas según el microcontrolador en particular, el mapa de memoria generalmente se divide en varias regiones:
+La familia de procesadores ARM Cortex-M posee un mapa de memoria uniforme y bien definido, lo que facilita la portabilidad del código y la consistencia en el diseño de sistemas embebidos. Esta es de 4G, que comienza en la direccion comienza en la dirección `0x00000000` y termina en la dirección `0xFFFFFFFF`, Aunque puede haber variaciones específicas según el microcontrolador en particular, el mapa de memoria generalmente se divide en varias regiones:
 
-1. **Memoria Flash**: Esta es donde generalmente se almacena el código del programa. Usualmente comienza en la dirección `0x08000000` o `0x00000000` dependiendo de la configuración de arranque del sistema.
+![Drag Racing](fig/mapaCortexM.png)
+
+a) **Area de Código** Longitud de 512 MB, y sus direcciones van desde  `0x00000000` a `0xFFFFFFFF`
+
+		i. **Memoria Flash**: Esta es donde generalmente se almacena el código del programa. Usualmente comienza en la dirección `0x08000000` o `0x00000000` dependiendo de la configuración de arranque del sistema.
   
 2. **Memoria RAM**: Utilizada para datos y almacenamiento temporal durante la ejecución del programa. Comúnmente comienza en direcciones como `0x20000000`.
   
@@ -99,7 +103,7 @@ La familia de procesadores ARM Cortex-M posee un mapa de memoria uniforme y bien
 
 Es fundamental comprender este mapa de memoria al diseñar software para microcontroladores basados en la arquitectura ARM Cortex-M, especialmente cuando se realizan operaciones a bajo nivel que requieren acceso directo a direcciones de memoria específicas.
 
-![Drag Racing](fig/mapaM0.png)
+
 
 
 5. ¿Qué ventajas presenta el uso de los “shadowed pointers” del PSP y el MSP?
