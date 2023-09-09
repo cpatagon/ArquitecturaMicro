@@ -101,22 +101,45 @@ a) **Area de Código** Longitud de 512 MB, y sus direcciones van desde  `0x00000
 
 ![Mapa de Memoria](fig/mapMemori_primer.png)
   
-2. **Memoria RAM**: Utilizada para datos y almacenamiento temporal durante la ejecución del programa, es decir se almacenan las variables. Comúnmente comienza en direcciones como `0x20000000`. Tiene una longitud de 0,5GB (máxima). 
+B). **Memoria RAM**: Utilizada para datos y almacenamiento temporal durante la ejecución del programa, es decir se almacenan las variables. Comúnmente comienza en direcciones como `0x20000000`. Tiene una longitud de 0,5GB (máxima). 
   
-3. **Registros de Periféricos**: Estos son mapeados en el espacio de direcciones para permitir la interacción con periféricos del microcontrolador como GPIO, UART, ADC, etc. Su posición en el mapa de memoria varía según el microcontrolador específico.
+C). **Registros de Periféricos**: Estos son mapeados en el espacio de direcciones para permitir la interacción con periféricos del microcontrolador como GPIO, UART, ADC, etc. Su posición en el mapa de memoria varía según el microcontrolador específico.
   
-4. **Memoria Externa**: Algunos microcontroladores pueden soportar memoria externa, que también tendría su propio rango en el mapa de memoria. Se puede (1GB)
+D). **Memoria Externa**: Algunos microcontroladores pueden soportar memoria externa, que también tendría su propio rango en el mapa de memoria. Se puede (1GB)
 
-5. **Perifericos Externos**: Como memoria Flash  (1GB)
+E). **Perifericos Externos**: Como memoria Flash  (1GB)
   
-6. **Regiones No Asignadas**: Estas son áreas del mapa de memoria que no están asignadas ni reservadas, y acceder a ellas generalmente resultará en un comportamiento indefinido. Registros propios del microcontrolador. Como perifericos propios del microcontrolador.
+B). **Regiones No Asignadas**: Estas son áreas del mapa de memoria que no están asignadas ni reservadas, y acceder a ellas generalmente resultará en un comportamiento indefinido. Registros propios del microcontrolador. Como perifericos propios del microcontrolador.
 
 Es fundamental comprender este mapa de memoria al diseñar software para microcontroladores basados en la arquitectura ARM Cortex-M, especialmente cuando se realizan operaciones a bajo nivel que requieren acceso directo a direcciones de memoria específicas.
 
 
 
 
-5. ¿Qué ventajas presenta el uso de los “shadowed pointers” del PSP y el MSP?
+### 5. ¿Qué ventajas presenta el uso de los “shadowed pointers” del PSP y el MSP?
+
+#### Ventajas del Uso de "Shadowed Pointers" para PSP y MSP en Microcontroladores ARM Cortex-M
+
+Los punteros sombreados ("shadowed pointers") para el PSP (Puntero de Pila de Proceso) y el MSP (Puntero de Pila Principal) ofrecen varias ventajas que contribuyen a la eficiencia y la reactividad del sistema. A continuación se detallan algunas de estas ventajas:
+
+##### Cambio Rápido de Contexto
+- Una ventaja clave es la capacidad de cambiar rápidamente entre diferentes contextos. Esto permite que el procesador cambie automáticamente del PSP al MSP cuando ocurre una interrupción, mejorando la eficiencia en el manejo de interrupciones.
+
+##### Separación de Privilegios
+- El uso de diferentes punteros de pila para los modos Thread y Handler facilita una separación clara de privilegios entre el código de la aplicación y el código de manejo de interrupciones. Esto es especialmente útil en sistemas con requisitos estrictos de seguridad o fiabilidad.
+
+##### Simplificación de la Gestión de Tareas
+- En sistemas que utilizan múltiples tareas o hilos, el PSP puede manejar el contexto de cada tarea de forma individual, mientras que el MSP se usa para funciones del sistema operativo y el manejo de interrupciones. Esto simplifica la lógica necesaria para el cambio de contexto en sistemas operativos en tiempo real (RTOS).
+
+##### Optimización de Desempeño
+- El hardware en estos microcontroladores puede estar optimizado para hacer cambios rápidos entre los punteros de pila, resultando en mejor rendimiento comparado con una implementación que maneje múltiples pilas puramente en software.
+
+##### Mayor Flexibilidad
+- Tener diferentes punteros de pila ofrece más flexibilidad para asignar y gestionar la memoria. Por ejemplo, se podría asignar una pila muy pequeña para ciertas interrupciones de alta prioridad para asegurar una respuesta rápida.
+
+En resumen, el uso de "shadowed pointers" para el PSP y MSP en la arquitectura ARM Cortex-M permite una gestión más eficaz y segura de múltiples tareas e interrupciones, mejorando la eficiencia general del sistema.
+
+
 
 6. Describa los diferentes modos de privilegio y operación del Cortex M, sus relaciones y como se conmuta de uno al otro. Describa un ejemplo en el que se pasa del modo privilegiado a no priviligiado y nuevamente a privilegiado.
 
