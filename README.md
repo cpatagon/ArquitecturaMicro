@@ -47,7 +47,7 @@ d. **Unidad de Punto Flotante (FPU)**: Opcionalmente, puede incluir una FPU para
 
 e. **Instrucciones SIMD**: Soporte para instrucciones SIMD para mejorar el rendimiento en operaciones paralelas.
 
-
+---
 ## 2. ¿Por qué se dice que el set de instrucciones Thumb permite mayor densidad de código? Explique
 
 El conjunto de instrucciones Thumb en la arquitectura ARM se diseñó con el objetivo de mejorar la densidad del código. Esto significa permitir que el código compilado ocupe menos espacio de memoria sin sacrificar demasiado rendimiento. A continuación se detallan algunas de las razones por las cuales Thumb logra una mayor densidad de código:
@@ -64,7 +64,7 @@ Thumb es compatible con el conjunto de instrucciones ARM más grande, lo que per
 #### Menor Ancho de Banda de Memoria
 Debido a que las instrucciones son más pequeñas, se requiere menos ancho de banda de memoria para cargarlas, lo que a su vez puede llevar a un sistema más eficiente en términos de energía.
 
-
+---
 ## 3. ¿Qué entiende por arquitectura load-store? ¿Qué tipo de instrucciones no posee este tipo de arquitectura?
 
  La arquitectura Load-Store es un tipo de diseño de conjunto de instrucciones (ISA, por sus siglas en inglés) en la que las instrucciones que realizan operaciones aritméticas o lógicas operan exclusivamente en registros del procesador, en lugar de directamente en la memoria. En esta arquitectura, las operaciones de carga (load) y almacenamiento (store) son las únicas que interactúan con la memoria. Este enfoque tiene varios beneficios, como facilitar la optimización del rendimiento y simplificar el diseño del procesador.
@@ -79,6 +79,8 @@ La arquitectura Load-Store generalmente no posee instrucciones que combinan oper
 
 Estas instrucciones estarían presentes en arquitecturas más complejas que permiten operaciones entre registros y memoria en una única instrucción, pero en una arquitectura Load-Store, estas tareas se descompondrían en múltiples instrucciones: una para cargar datos de la memoria a un registro, una para realizar la operación en registros y una tercera para almacenar el resultado de nuevo en la memoria.
 
+
+---
 ## 4. ¿Cómo es el mapa de memoria de la familia?
 
 ### Mapa de Memoria de la Familia ARM Cortex-M
@@ -115,7 +117,7 @@ Es fundamental comprender este mapa de memoria al diseñar software para microco
 
 
 
-
+---
 ## 5. ¿Qué ventajas presenta el uso de los “shadowed pointers” del PSP y el MSP?
 
 ### Ventajas del Uso de "Shadowed Pointers" para PSP y MSP en Microcontroladores ARM Cortex-M
@@ -140,7 +142,7 @@ Los punteros sombreados ("shadowed pointers") para el PSP (Puntero de Pila de Pr
 En resumen, el uso de "shadowed pointers" para el PSP y MSP en la arquitectura ARM Cortex-M permite una gestión más eficaz y segura de múltiples tareas e interrupciones, mejorando la eficiencia general del sistema.
 
 
-
+---
 ## 6. Describa los diferentes modos de privilegio y operación del Cortex M, sus relaciones y como se conmuta de uno al otro. Describa un ejemplo en el que se pasa del modo privilegiado a no priviligiado y nuevamente a privilegiado.
 
 
@@ -190,7 +192,7 @@ Este ejemplo ilustra cómo un sistema operativo en tiempo real podría gestionar
 En resumen, los microcontroladores ARM Cortex-M ofrecen modos de operación y niveles de privilegio flexibles que permiten una gestión eficaz de las tareas y los recursos del sistema, así como una transición eficiente y segura entre diferentes contextos y niveles de acceso.
 
 
-
+---
 ## 7. ¿Qué se entiende por modelo de registros ortogonal? Dé un ejemplo
 
 ### Modelo de Registros Ortogonal
@@ -223,7 +225,7 @@ En este caso, podemos utilizar cualquier registro general (R0 a R12) para almace
 
 
 
-
+---
 ## 8. ¿Qué ventajas presenta el uso de intrucciones de ejecución condicional (IT)? Dé un ejemplo
 
 ### Ventajas del Uso de Instrucciones de Ejecución Condicional (IT) en ARM Cortex-M
@@ -250,12 +252,13 @@ A continuación se muestra un ejemplo simple que utiliza la instrucción `IT` pa
     ADDEQ R2, R2, #1   ; Si son iguales (condición EQ), suma 1 a R2
     ADDNE R2, R2, #0   ; Si son diferentes (condición NE), no cambia R2
 ```
+
 En este ejemplo, si R0 y R1 son iguales (EQ), entonces la instrucción ADDEQ se ejecutará, sumando 1 a R2. De lo contrario, la instrucción ADDNE se ejecutará, pero no cambiará el valor de R2.
 
 Este tipo de instrucciones condicionales permite una optimización tanto en tamaño de código como en velocidad de ejecución.
   
  
-
+---
 ## 9. Describa brevemente las excepciones más prioritarias (reset, NMI, Hardfault).
 
 ### Excepciones Más Prioritarias en ARM Cortex-M
@@ -283,9 +286,7 @@ Los microcontroladores basados en la arquitectura ARM Cortex-M manejan diferente
 Estas excepciones de alta prioridad garantizan que el sistema pueda responder a eventos críticos de manera adecuada, incluso si otras interrupciones están siendo procesadas o enmascaradas.
 
 
-
-
-
+---
 ## 10. Describa las funciones principales de la pila. ¿Cómo resuelve la arquitectura el llamado a funciones y su retorno?
 
 ### Funciones Principales de la Pila en la Arquitectura de Computadoras
@@ -353,7 +354,6 @@ El proceso de reset es fundamental para inicializar un microprocesador y prepara
 Estos pasos aseguran que el microprocesador se inicialice en un estado limpio y predecible, listo para la ejecución de programas.
 
 ---
-
 ## 12. ¿Qué entiende por “core peripherals”? ¿Qué diferencia existe entre estos y el resto de los periféricos?
 
 ### ¿Qué son los "Core Peripherals" en la Arquitectura de Microprocesadores ARM Cortex-M?
