@@ -141,11 +141,88 @@ En resumen, el uso de "shadowed pointers" para el PSP y MSP en la arquitectura A
 
 
 
-6. Describa los diferentes modos de privilegio y operación del Cortex M, sus relaciones y como se conmuta de uno al otro. Describa un ejemplo en el que se pasa del modo privilegiado a no priviligiado y nuevamente a privilegiado.
+### 6. Describa los diferentes modos de privilegio y operación del Cortex M, sus relaciones y como se conmuta de uno al otro. Describa un ejemplo en el que se pasa del modo privilegiado a no priviligiado y nuevamente a privilegiado.
 
-7. ¿Qué se entiende por modelo de registros ortogonal? Dé un ejemplo
 
-8. ¿Qué ventajas presenta el uso de intrucciones de ejecución condicional (IT)? Dé un ejemplo
+Los microcontroladores ARM Cortex-M ofrecen diferentes modos de operación y niveles de privilegio que permiten un control granular sobre la ejecución del programa y la gestión de recursos. Estos modos y niveles son especialmente útiles para aplicaciones embebidas y sistemas operativos en tiempo real (RTOS).
+
+#### Modos de Operación
+1. **Thread Mode**: Este es el modo inicial después del arranque y generalmente es donde se ejecuta el código de aplicación.
+2. **Handler Mode**: Este modo se activa automáticamente cuando se produce una excepción o interrupción. Se utiliza para manejar interrupciones y excepciones.
+
+#### Niveles de Privilegio
+1. **Privilegiado**: Permite acceso completo a todas las instrucciones y recursos del sistema.
+2. **No Privilegiado**: Restringe el acceso a ciertos recursos e instrucciones, como las instrucciones que manipulan el modo de operación y nivel de privilegio.
+
+#### Relaciones entre los Modos y Niveles de Privilegio
+- **Thread Mode**: Puede operar tanto en nivel privilegiado como en no privilegiado. 
+- **Handler Mode**: Siempre opera en nivel privilegiado.
+
+#### Conmutación entre Modos y Niveles de Privilegio
+1. **De Thread a Handler Mode**: La transición ocurre automáticamente cuando se produce una excepción o interrupción. El procesador guarda el contexto actual y cambia al Handler Mode.
+2. **De Handler a Thread Mode**: Al finalizar la ejecución del controlador de interrupción, se restaura el contexto y se regresa al Thread Mode.
+3. **De Privilegiado a No Privilegiado**: Esto generalmente se realiza mediante instrucciones específicas que modifican el estado del procesador.
+4. **De No Privilegiado a Privilegiado**: Esto usualmente se hace a través de una excepción controlada, como una llamada al sistema operativo, que conmuta al Handler Mode (que es siempre privilegiado).
+
+
+#### Ejemplo de Transición entre Modos Privilegiado y No Privilegiado en ARM Cortex-M
+
+Imaginemos un sistema embebido con un sistema operativo en tiempo real (RTOS) que maneja dos tareas: una tarea de sensor y una tarea de usuario. La tarea de sensor es crítica para el sistema, mientras que la tarea de usuario es menos crítica. En este escenario, es probable que se desee que la tarea de sensor opere en un modo privilegiado para acceder directamente a recursos del sistema, mientras que la tarea de usuario debería operar en un modo no privilegiado para limitar su acceso a recursos críticos del sistema.
+
+#### Paso a No Privilegiado desde Privilegiado
+1. **Inicio en Modo Privilegiado**: Suponga que el sistema arranca y el RTOS se inicializa en el Thread Mode con nivel de privilegio.
+2. **Llamada a la Tarea de Usuario**: El RTOS decide que es momento de ejecutar la tarea de usuario.
+3. **Cambio a No Privilegiado**: Antes de pasar el control a la tarea de usuario, el RTOS utiliza instrucciones específicas para cambiar al modo no privilegiado.
+4. **Ejecución de la Tarea de Usuario**: Ahora, la tarea de usuario se ejecuta con un nivel no privilegiado, limitando su capacidad para acceder o modificar recursos críticos del sistema.
+
+#### Regreso a Modo Privilegiado
+1. **Interrupción o Excepción**: Suponga que el sensor produce una interrupción que necesita ser manejada de inmediato.
+2. **Handler Mode**: El procesador cambia automáticamente al Handler Mode (que siempre es privilegiado) para manejar esta interrupción.
+3. **Ejecución de la Tarea de Sensor**: La tarea de sensor se ejecuta para manejar los datos del sensor.
+4. **Regreso a Thread Mode**: Una vez que se ha manejado la interrupción, el sistema vuelve al Thread Mode y regresa al RTOS, que podría optar por seguir ejecutando la tarea de usuario o conmutar a otra tarea.
+
+#### Notas Adicionales
+- En la transición de Handler Mode a Thread Mode, el RTOS podría decidir restaurar el estado de privilegio según la tarea a la que pasará el control.
+
+Este ejemplo ilustra cómo un sistema operativo en tiempo real podría gestionar tareas con diferentes niveles de privilegio y cómo se puede conmutar entre los modos privilegiado y no privilegiado para mantener tanto la seguridad como la eficiencia del sistema.
+
+
+En resumen, los microcontroladores ARM Cortex-M ofrecen modos de operación y niveles de privilegio flexibles que permiten una gestión eficaz de las tareas y los recursos del sistema, así como una transición eficiente y segura entre diferentes contextos y niveles de acceso.
+
+
+
+### 7. ¿Qué se entiende por modelo de registros ortogonal? Dé un ejemplo
+
+### Modelo de Registros Ortogonal
+
+El concepto de "modelo de registros ortogonal" se refiere a un diseño de arquitectura de conjunto de instrucciones (ISA) en el que cada instrucción puede utilizar cualquier registro del conjunto de registros disponibles de manera indistinta. En otras palabras, las instrucciones no están limitadas a usar un subconjunto específico de registros, y cualquier instrucción que opere en registros puede utilizar cualquiera de los registros disponibles.
+
+#### Ventajas
+
+- **Simplicidad**: Hace que el conjunto de instrucciones sea más fácil de entender y usar.
+- **Flexibilidad**: Permite más libertad al compilador o al programador para optimizar el uso de registros.
+- **Eficiencia**: Puede reducir la cantidad de instrucciones necesarias para mover datos entre registros específicos, mejorando así la eficiencia del código.
+
+#### Ejemplo en un Modelo de Registros No Ortogonal
+
+La arquitectura de los microcontroladores ARM Cortex-M de STMicroelectronics generalmente sigue un modelo más ortogonal en comparación con algunas otras arquitecturas, pero no es completamente ortogonal en el sentido más estricto del término.
+
+En ARM Cortex-M, la mayoría de las instrucciones de operaciones aritméticas y lógicas pueden operar con varios registros del conjunto de registros del núcleo. Sin embargo, hay algunas restricciones en instrucciones específicas o en ciertas formas de direccionamiento. Por ejemplo, ciertas instrucciones pueden requerir que uno de los operandos esté en un registro de bajo orden (R0-R7).
+
+#### Ejemplo en ARM Cortex-M
+
+Un ejemplo de instrucción en ARM Cortex-M podría ser:
+
+```assembly
+ADD R0, R1, R2  // Suma R1 y R2, y almacena el resultado en R0
+
+```
+
+n este caso, podemos utilizar cualquier registro general (R0 a R12) para almacenar y manipular datos, lo cual es bastante flexible y se acerca al concepto de un modelo de registros ortogonal.
+
+En este caso, podemos utilizar cualquier registro general (R0 a R12) para almacenar y manipular datos, lo cual es bastante flexible y se acerca al concepto de un modelo de registros ortogonal.
+
+### 8. ¿Qué ventajas presenta el uso de intrucciones de ejecución condicional (IT)? Dé un ejemplo
 
 9. Describa brevemente las excepciones más prioritarias (reset, NMI, Hardfault).
 
