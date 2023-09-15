@@ -410,7 +410,10 @@ NVIC_SetPriority(TempSensor_IRQn, 1);  // Prioridad más alta
 NVIC_EnableIRQ(Button_IRQn);
 NVIC_EnableIRQ(TempSensor_IRQn);
 ```
+
 En este ejemplo, la interrupción del sensor de temperatura tiene una prioridad más alta (1) que la del botón (5). Si ambas interrupciones se disparan al mismo tiempo, el NVIC asegurará que primero se atienda la interrupción del sensor de temperatura.
+
+
 ---
 ## 14. ¿Qué es el CMSIS? ¿Qué función cumple? ¿Quién lo provee? ¿Qué ventajas aporta?
 
