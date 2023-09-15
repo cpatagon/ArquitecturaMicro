@@ -417,23 +417,327 @@ En este ejemplo, la interrupción del sensor de temperatura tiene una prioridad 
 ---
 ## 14. ¿Qué es el CMSIS? ¿Qué función cumple? ¿Quién lo provee? ¿Qué ventajas aporta?
 
+### ¿Qué es el CMSIS?
+
+CMSIS significa Cortex Microcontroller Software Interface Standard. Es un conjunto estandarizado de interfaces de software, bibliotecas y definiciones de macros diseñadas para simplificar y acelerar el desarrollo de aplicaciones en microcontroladores basados en la arquitectura ARM Cortex-M.
+
+#### ¿Qué función cumple?
+
+1. **Abstracción de Hardware**: Provee una capa de abstracción de hardware que facilita la portabilidad de código entre diferentes microcontroladores Cortex-M.
+
+2. **Bibliotecas de Soporte**: Incluye una amplia variedad de bibliotecas de soporte para tareas comunes como el manejo de periféricos, matemáticas y operaciones en tiempo real.
+
+3. **Depuración y Diagnóstico**: Ofrece funcionalidades para depuración, trazabilidad y diagnóstico del sistema.
+
+4. **Manejo de Interrupciones**: Simplifica la configuración y el manejo de interrupciones a través del NVIC.
+
+#### ¿Quién lo provee?
+
+CMSIS es provisto y mantenido por ARM Ltd. (ahora parte de NVIDIA).
+
+#### ¿Qué ventajas aporta?
+
+1. **Portabilidad**: Facilita la portabilidad de código entre diferentes plataformas basadas en Cortex-M.
+
+2. **Rapidez de Desarrollo**: Las bibliotecas y abstracciones predefinidas aceleran el proceso de desarrollo.
+
+3. **Uniformidad**: Al usar un estándar común, los desarrolladores pueden compartir y colaborar más fácilmente en proyectos.
+
+4. **Optimización**: Las bibliotecas incluidas están optimizadas para un rendimiento eficiente en microcontroladores Cortex-M.
+
+5. **Soporte y Mantenimiento**: Al ser un estándar mantenido por ARM, se beneficia de actualizaciones y soporte regulares.
+
+En resumen, CMSIS busca simplificar y estandarizar el desarrollo de software para microcontroladores basados en la arquitectura ARM Cortex-M, facilitando así el desarrollo de aplicaciones robustas y eficientes.
+
+
+
+---
 ## 15. Cuando ocurre una interrupción, asumiendo que está habilitada ¿Cómo opera el microprocesador para atender a la subrutina correspondiente? Explique con un ejemplo
 
-## 17. ¿Cómo cambia la operación de stacking al utilizar la unidad de punto flotante?
+### Procedimiento de Manejo de Interrupciones en Microprocesadores ARM Cortex-M
 
-## 16. Explique las características avanzadas de atención a interrupciones: tail chaining y late arrival.
+Cuando ocurre una interrupción y está habilitada, el microprocesador ARM Cortex-M sigue una serie de pasos para atender a la subrutina correspondiente. Este procedimiento se conoce como "context switching" o cambio de contexto.
 
-## 17. ¿Qué es el systick? ¿Por qué puede afirmarse que su implementación favorece la portabilidad de los sistemas operativos embebidos?
+#### Secuencia de Operación
 
-## 18. ¿Qué funciones cumple la unidad de protección de memoria (MPU)?
+1. **Detener la Ejecución Actual**: El microprocesador detiene la ejecución del código actual.
 
-## 19. ¿Cuántas regiones pueden configurarse como máximo? ¿Qué ocurre en caso de haber solapamientos de las regiones? ¿Qué ocurre con las zonas de memoria no cubiertas por las regiones definidas?
+2. **Guardar el Contexto Actual**: Guarda el contexto actual del CPU, que incluye varios registros y el Program Counter, en la pila (stack).
 
-## 20. ¿Para qué se suele utilizar la excepción PendSV? ¿Cómo se relaciona su uso con el resto de las excepciones? Dé un ejemplo
+3. **Consultar Vector de Interrupciones**: Se consulta la tabla de vectores de interrupciones para encontrar la dirección de la subrutina de manejo de interrupción (Interrupt Service Routine, ISR) correspondiente.
 
-21. ¿Para qué se suele utilizar la excepción SVC? Expliquelo dentro de un marco de un sistema operativo embebido.
+4. **Saltar a la ISR**: El Program Counter se actualiza para saltar a la dirección de inicio de la ISR.
 
-## ISA
+5. **Ejecutar ISR**: Se ejecuta el código dentro de la ISR.
+
+6. **Restaurar Contexto y Retornar**: Una vez finalizada la ISR, se restaura el contexto original desde la pila y se retoma la ejecución del código donde fue interrumpido.
+
+#### Ejemplo en Código C
+
+Supongamos que tenemos una interrupción de un botón que cambia el estado de un LED.
+
+```c
+// ISR para la interrupción del botón
+void Button_IRQHandler(void) {
+    // Código para cambiar el estado del LED
+    toggleLED();
+    
+    // Limpiar la señal de interrupción
+    clearButtonInterruptFlag();
+}
+
+// Configuración inicial
+void setup() {
+    // Configurar y habilitar la interrupción del botón
+    configureButtonInterrupt();
+    NVIC_EnableIRQ(Button_IRQn);
+}
+
+// Bucle principal
+void loop() {
+    // Código de la aplicación principal
+}
+```
+
+En este ejemplo, cuando se presiona el botón, se genera una interrupción que es atendida por la función Button_IRQHandler. Dentro de esta ISR, se cambia el estado del LED y se limpia la señal de interrupción para prepararse para futuras interrupciones.
+
+
+---
+## 16. ¿Cómo cambia la operación de stacking al utilizar la unidad de punto flotante?
+
+### Cambio en la Operación de Stacking con Unidad de Punto Flotante en ARM Cortex-M
+
+En los microprocesadores ARM Cortex-M que incorporan una Unidad de Punto Flotante (FPU), el mecanismo de "stacking" o apilado durante una interrupción varía ligeramente en comparación con aquellos que no tienen FPU. 
+
+#### Operación de Stacking sin FPU
+
+En un microcontrolador sin FPU, el stacking implica guardar registros de propósito general (como R0 a R3), el Program Counter (PC), el Program Status Register (xPSR), etc., en la pila (stack) antes de saltar a la rutina de servicio de interrupción (ISR).
+
+#### Operación de Stacking con FPU
+
+Cuando se utiliza un microcontrolador con FPU, el hardware adicionalmente guarda y restaura los registros de punto flotante en la pila durante un cambio de contexto. Esto es especialmente relevante si la ISR utiliza operaciones de punto flotante.
+
+1. **Registros de Punto Flotante**: Registros como S0-S15 y otros registros relacionados con la FPU son guardados en la pila, además de los registros de propósito general y de estado.
+
+2. **Tamaño de la Pila**: Debido a la adición de registros de punto flotante, el tamaño del área de stacking se incrementa.
+
+3. **Tiempo de Ejecución**: El tiempo requerido para entrar y salir de la ISR podría ser ligeramente mayor debido al tiempo extra requerido para guardar y restaurar más registros.
+
+4. **CONTROL.FPCA**: Este bit en el registro CONTROL determina si los registros de punto flotante serán apilados o no. Si está habilitado, se realizará el stacking completo incluyendo los registros de la FPU.
+
+#### Ejemplo
+
+```c
+// ISR que utiliza operaciones de punto flotante
+void My_IRQHandler(void) {
+    float a = 10.5;
+    float b = 20.5;
+    float result = a + b;  // Operación de punto flotante
+    // Código adicional
+}
+```
+En este ejemplo, debido a la operación de punto flotante dentro de la ISR, si el bit CONTROL.FPCA está habilitado, los registros de punto flotante involucrados en la operación serán guardados y restaurados durante el stacking y unstacking respectivamente.
+
+
+
+---
+## 17. Explique las características avanzadas de atención a interrupciones: tail chaining y late arrival.
+
+### Características Avanzadas de Atención a Interrupciones: Tail Chaining y Late Arrival
+
+Los microcontroladores ARM Cortex-M ofrecen algunas características avanzadas para el manejo eficiente de interrupciones, que incluyen "Tail Chaining" y "Late Arrival". Estas optimizaciones están diseñadas para reducir el tiempo y el costo en ciclos de CPU asociados con el servicio de interrupciones.
+
+### Tail Chaining
+
+La técnica de "Tail Chaining" permite a múltiples interrupciones ser manejadas más eficientemente al evitar el "unstacking" y "stacking" redundantes entre interrupciones consecutivas.
+
+#### Cómo Funciona:
+
+1. **Primera Interrupción**: El microcontrolador entra en la ISR (Rutina de Servicio de Interrupción) y apila el contexto actual.
+2. **Segunda Interrupción**: Si una segunda interrupción llega antes de que la primera ISR termine, el microcontrolador evita el proceso de "unstacking" del contexto de la primera ISR.
+3. **Transición Directa**: En lugar de restaurar el contexto y luego volver a apilarlo para la segunda ISR, el microcontrolador transita directamente de la primera a la segunda ISR.
+
+#### Ventajas:
+
+- Menor tiempo en el servicio de interrupciones consecutivas.
+- Ahorro de ciclos de CPU.
+
+### Late Arrival
+
+"Late Arrival" es otra técnica avanzada que permite a una interrupción con una prioridad más alta "interrumpir" una interrupción de menor prioridad durante el proceso de "stacking".
+
+#### Cómo Funciona:
+
+1. **Interrupción de Menor Prioridad**: Se activa una interrupción y el microcontrolador comienza a apilar el contexto.
+2. **Interrupción de Mayor Prioridad**: Si llega una interrupción de mayor prioridad durante el apilado del contexto de la interrupción de menor prioridad, el proceso de apilado se completa rápidamente.
+3. **Atender la Mayor Prioridad**: El microcontrolador inmediatamente comienza a atender la interrupción de mayor prioridad.
+
+#### Ventajas:
+
+- Capacidad para responder rápidamente a interrupciones de alta prioridad.
+- Mejora el rendimiento del sistema al asegurar que las interrupciones críticas se manejen lo más rápido posible.
+
+En resumen, tanto "Tail Chaining" como "Late Arrival" son características avanzadas que optimizan el manejo de interrupciones, reduciendo el tiempo y los ciclos de CPU necesarios para el servicio de múltiples interrupciones.
+
+
+
+
+
+---
+## 18. ¿Qué es el systick? ¿Por qué puede afirmarse que su implementación favorece la portabilidad de los sistemas operativos embebidos?
+
+### SysTick: Reloj del Sistema y Portabilidad en Sistemas Operativos Embebidos
+
+#### ¿Qué es el SysTick?
+
+SysTick (System Tick Timer) es un temporizador de cuenta regresiva presente en los microcontroladores ARM Cortex-M. Es un periférico del núcleo (core peripheral) que proporciona una fuente de interrupción con una frecuencia regular y bien conocida. SysTick se utiliza comúnmente para implementar funciones de tiempo de retraso (delay), medir el tiempo transcurrido, y más importante aún, para el "scheduling" o planificación de tareas en sistemas operativos en tiempo real (RTOS).
+
+#### Características Principales
+
+- **Facilidad de Uso**: Configurar SysTick es sencillo, lo que facilita su uso en aplicaciones diversas.
+- **Base de Tiempo**: Proporciona una fuente de tiempo consistente y predecible.
+- **Interrupciones**: Puede generar interrupciones en intervalos de tiempo regulares, lo cual es útil para la planificación de tareas.
+
+#### Ventajas para la Portabilidad de Sistemas Operativos Embebidos
+
+1. **Estándar en Cortex-M**: Dado que SysTick es un componente estándar en la arquitectura Cortex-M, los sistemas operativos que lo utilizan son más fáciles de portar entre diferentes microcontroladores basados en esta arquitectura.
+
+2. **Abstracción de Hardware**: SysTick ofrece una capa de abstracción para el temporizador, lo que significa que el código del sistema operativo no necesita conocer los detalles específicos del hardware para implementar la funcionalidad de temporización.
+
+3. **Facilita el Multitasking**: Al proporcionar una fuente de interrupción regular, SysTick facilita la implementación de algoritmos de planificación, haciendo más sencillo el soporte de multitarea.
+
+4. **Independencia de Proveedor**: Al utilizar el periférico estándar SysTick, los sistemas operativos embebidos no están atados a una implementación específica de un proveedor, lo que mejora la portabilidad.
+
+5. **Configuración Simplificada**: Al estar bien documentado y ser consistente en toda la familia Cortex-M, SysTick simplifica la configuración de temporizadores, reduciendo la curva de aprendizaje cuando se pasa a un nuevo microcontrolador.
+
+
+En resumen, SysTick es un periférico de núcleo en la arquitectura ARM Cortex-M que no solo facilita la programación de temporizadores, sino que también aumenta significativamente la portabilidad de los sistemas operativos embebidos entre diferentes microcontroladores basados en Cortex-M.
+
+
+
+
+---
+## 19. ¿Qué funciones cumple la unidad de protección de memoria (MPU)?
+
+### Funciones de la Unidad de Protección de Memoria (MPU)
+
+La Unidad de Protección de Memoria (MPU, por sus siglas en inglés Memory Protection Unit) es un componente opcional en algunos microcontroladores ARM Cortex-M. Su objetivo principal es mejorar la seguridad y la robustez del sistema al proporcionar un mecanismo de control de acceso a regiones de memoria.
+
+### Funciones Principales
+
+1. **Control de Acceso**: La MPU permite configurar políticas de acceso para diferentes regiones de memoria. Esto puede incluir quién puede leer, escribir o ejecutar código en ciertas áreas de memoria.
+
+2. **Aislamiento de Tareas**: En un entorno multitarea, la MPU puede ser usada para aislar las áreas de memoria utilizadas por diferentes tareas, asegurando que una tarea no pueda acceder o modificar la memoria utilizada por otra.
+
+3. **Protección contra Fallos**: Al restringir el acceso a ciertas regiones de memoria, la MPU ayuda a evitar que errores de software, como desbordamientos de búfer, afecten a áreas críticas del sistema.
+
+4. **Seguridad**: Puede añadir una capa adicional de seguridad al evitar el acceso no autorizado a áreas de memoria que contienen datos o código sensible.
+
+5. **Modos de Operación**: Facilita la implementación de diferentes modos de operación (por ejemplo, modos privilegiados y no privilegiados) en el sistema, permitiendo diferentes niveles de acceso a la memoria en función del modo actual.
+
+### Ejemplos de Uso
+
+- **RTOS**: En un Sistema Operativo en Tiempo Real, la MPU puede ser utilizada para asegurar que las tareas individuales no puedan interferir entre sí, mejorando así la estabilidad y fiabilidad del sistema.
+
+- **Aplicaciones Críticas**: En sistemas que manejan información sensible o que controlan maquinaria, la MPU puede evitar accesos no deseados o errores que podrían ser catastróficos.
+
+En resumen, la Unidad de Protección de Memoria en microcontroladores ARM Cortex-M proporciona un conjunto de funcionalidades esenciales para aumentar la seguridad, la robustez y la integridad del sistema, siendo especialmente útil en aplicaciones complejas y sistemas en tiempo real.
+
+
+
+---
+## 20. ¿Cuántas regiones pueden configurarse como máximo? ¿Qué ocurre en caso de haber solapamientos de las regiones? ¿Qué ocurre con las zonas de memoria no cubiertas por las regiones definidas?
+
+### Configuración de Regiones en la MPU y Manejo de Solapamientos
+
+#### Cantidad Máxima de Regiones
+
+El número de regiones que pueden ser configuradas en la Unidad de Protección de Memoria (MPU) varía según la implementación específica del microcontrolador ARM Cortex-M. Algunos pueden soportar tan pocas como 8 regiones, mientras que otros pueden soportar más. Es importante consultar la documentación específica del microcontrolador para obtener detalles precisos.
+
+#### Solapamientos de Regiones
+
+Si hay regiones que se solapan, la MPU normalmente aplica la política de la región con el número más alto. En otras palabras, si las regiones 2 y 3 se solapan, las políticas configuradas para la región 3 tendrían prioridad sobre las de la región 2.
+
+#### Zonas de Memoria No Cubiertas
+
+Las áreas de memoria que no están cubiertas por ninguna región configurada en la MPU generalmente tendrán el acceso definido por los ajustes por defecto del sistema o del modo de operación actual (por ejemplo, privilegiado o no privilegiado). Estas áreas serán accesibles según los permisos predeterminados, lo cual podría representar un riesgo si no se maneja cuidadosamente.
+
+#### Resumen
+
+- **Máximo de Regiones**: Depende de la implementación específica del microcontrolador.
+- **Solapamientos**: La región con el número más alto tiene prioridad.
+- **Áreas No Cubiertas**: Acceso según los ajustes por defecto del sistema o modo de operación.
+
+Al comprender estos aspectos, se puede configurar la MPU de manera efectiva para proteger las áreas críticas de la memoria y permitir un acceso adecuado para diferentes tareas o modos de operación.
+
+
+
+
+---
+## 21. ¿Para qué se suele utilizar la excepción PendSV? ¿Cómo se relaciona su uso con el resto de las excepciones? Dé un ejemplo
+
+### Uso de la Excepción PendSV y su Relación con Otras Excepciones
+
+#### ¿Para qué se suele utilizar la Excepción PendSV?
+
+La excepción PendSV (Pendable Service Call) se utiliza comúnmente en microcontroladores ARM Cortex-M para realizar cambios de contexto en Sistemas Operativos en Tiempo Real (RTOS). Esta excepción es especialmente útil para manipular el cambio de una tarea a otra de manera eficiente.
+
+#### Relación con Otras Excepciones
+
+La excepción PendSV suele tener la menor prioridad entre todas las excepciones e interrupciones, lo que la hace útil para realizar cambios de contexto sólo cuando no hay otras excepciones o interrupciones más críticas que requieran ser atendidas. Esta baja prioridad asegura que las tareas más urgentes se ejecuten primero y que el cambio de contexto se realice sólo en momentos apropiados.
+
+#### Ejemplo
+
+Supongamos que estamos usando un RTOS y tenemos dos tareas: `Tarea_A` y `Tarea_B`. `Tarea_A` es una tarea de alta prioridad que maneja la entrada/salida de un sensor, y `Tarea_B` es una tarea de baja prioridad que actualiza la interfaz de usuario.
+
+1. `Tarea_A` se activa debido a una nueva lectura del sensor y preemte a `Tarea_B`.
+2. Al finalizar su ejecución, `Tarea_A` libera su recurso y el RTOS decide que es momento de volver a `Tarea_B`.
+3. En lugar de realizar el cambio de contexto inmediatamente, el RTOS pone la excepción PendSV pendiente.
+4. Como PendSV tiene la menor prioridad, se ejecutará solo después de que todas las otras excepciones e interrupciones hayan sido atendidas.
+5. Cuando finalmente se ejecuta PendSV, se realiza el cambio de contexto y `Tarea_B` retoma su ejecución.
+
+
+De esta manera, el uso de PendSV permite una gestión eficiente del cambio de contexto, asegurando que las tareas y excepciones de mayor prioridad sean atendidas primero.
+
+
+
+
+---
+## 22. ¿Para qué se suele utilizar la excepción SVC? Explíquelo dentro de un marco de un sistema operativo embebido.
+
+
+### Uso de la Excepción SVC en un Sistema Operativo Embebido
+
+#### ¿Qué es la Excepción SVC?
+
+La excepción SVC (SuperVisor Call) es una excepción de software en la familia de microcontroladores ARM Cortex-M. Se activa mediante la instrucción `SVC`, y se usa principalmente para cambiar el nivel de privilegio del código, desde un modo no privilegiado a un modo privilegiado.
+
+#### Uso en un Sistema Operativo Embebido
+
+En un Sistema Operativo en Tiempo Real (RTOS) embebido, la excepción SVC se utiliza comúnmente para implementar llamadas al sistema (system calls). Estas son funciones del núcleo del sistema operativo que proporcionan servicios seguros y controlados a las tareas o procesos en ejecución.
+
+##### Ejemplo de Uso
+
+1. **Modo No Privilegiado**: Una tarea en modo no privilegiado necesita acceder a un recurso de hardware.
+  
+2. **Llamada al Sistema**: La tarea no puede acceder directamente al recurso por razones de seguridad y, en su lugar, hace una llamada al sistema.
+
+3. **Instrucción SVC**: La llamada al sistema usa la instrucción `SVC` para invocar la excepción SVC.
+
+4. **Cambio a Modo Privilegiado**: Cuando se activa la excepción SVC, el sistema cambia a modo privilegiado.
+
+5. **Ejecución Segura**: Ahora, en modo privilegiado, el núcleo del RTOS puede acceder al recurso de hardware de forma segura y realizar la operación solicitada por la tarea.
+
+6. **Regreso al Modo No Privilegiado**: Una vez completada la operación, el sistema regresa al modo no privilegiado y retoma la ejecución de la tarea.
+
+De esta manera, la excepción SVC facilita un mecanismo para gestionar el acceso seguro a recursos y funcionalidades que de otro modo estarían restringidas para el código en modo no privilegiado. Esto es crucial para mantener la integridad y la seguridad en sistemas operativos embebidos.
+
+
+
+
+
+
+# ISA
 1. ¿Qué son los sufijos y para qué se los utiliza? Dé un ejemplo
 
 2. ¿Para qué se utiliza el sufijo ‘s’? Dé un ejemplo
