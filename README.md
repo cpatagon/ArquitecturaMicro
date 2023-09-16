@@ -992,10 +992,10 @@ Tanto la pila (stack) como los registros son formas de almacenamiento de datos e
 
 En un programa, generalmente se utilizan ambos para diferentes propósitos, optimizando así la eficiencia y el rendimiento del sistema.
 
+---
+## Importancia de la PSR (Program Status Register)
 
-### Importancia de la PSR (Program Status Register)
-
-#### ¿Qué es la PSR?
+### ¿Qué es la PSR?
 
 La PSR (Program Status Register) es un registro especial en la arquitectura de los microcontroladores ARM Cortex-M que contiene información sobre el estado del programa en ejecución. Este registro está compuesto por varios campos que almacenan distintos tipos de información de estado, incluidos el estado de las condiciones del procesador, modos de ejecución, y otras informaciones de control.
 
