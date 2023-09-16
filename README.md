@@ -832,6 +832,35 @@ BEQ some_label  ; Saltar a "some_label" si el resultado de la última operación
 BEQ some_label  ; Saltar a "some_label" si el resultado de la última operación con sufijo 'S' fue cero
 
 
+### Importancia de la PSR (Program Status Register)
+
+#### ¿Qué es la PSR?
+
+La PSR (Program Status Register) es un registro especial en la arquitectura de los microcontroladores ARM Cortex-M que contiene información sobre el estado del programa en ejecución. Este registro está compuesto por varios campos que almacenan distintos tipos de información de estado, incluidos el estado de las condiciones del procesador, modos de ejecución, y otras informaciones de control.
+
+#### Campos Importantes
+
+- **N, Z, C, V**: Bits de estado de las condiciones que reflejan el resultado de las operaciones matemáticas (Negative, Zero, Carry, Overflow).
+- **I, T**: Bits para controlar las interrupciones y el modo de instrucción Thumb.
+- **M4-M0**: Bits para controlar el modo de operación (Modo privilegiado, modo de usuario, etc.).
+
+#### Importancia
+
+1. **Control de Flujo**: Los bits de estado de las condiciones permiten la implementación de estructuras de control como bucles y sentencias condicionales.
+  
+2. **Manejo de Interrupciones**: El bit de interrupción permite habilitar o deshabilitar interrupciones, lo cual es crucial para el manejo de eventos y tareas en tiempo real.
+
+3. **Modo de Ejecución**: Los bits que controlan el modo de operación permiten cambiar entre modos privilegiados y no privilegiados, lo cual es vital para la seguridad y el aislamiento en sistemas embebidos.
+
+4. **Transición de Modos**: Permite cambiar fácilmente entre modos de ejecución, como pasar de modo Thumb a modo ARM, lo cual puede tener implicaciones en la eficiencia del código.
+
+5. **Debugging y Mantenimiento**: Mantener un registro de estado permite un diagnóstico más fácil durante el debugging y ayuda en el mantenimiento del sistema.
+
+---
+
+En resumen, la **PSR** es un registro fundamental en la arquitectura ARM Cortex-M que facilita la programación, el control de flujo, el manejo de interrupciones, y contribuye a la robustez y seguridad del sistema embebido.
+
+
 ---
 ## 3. ¿Qué utilidad tiene la implementación de instrucciones de aritmética saturada? Dé un ejemplo con operaciones con datos de 8 bits.
 
