@@ -736,14 +736,215 @@ De esta manera, la excepción SVC facilita un mecanismo para gestionar el acceso
 
 
 
-
+---
 # ISA
-1. ¿Qué son los sufijos y para qué se los utiliza? Dé un ejemplo
+## 1. ¿Qué son los sufijos y para qué se los utiliza? Dé un ejemplo
 
-2. ¿Para qué se utiliza el sufijo ‘s’? Dé un ejemplo
+### Sufijos en Instrucciones: Propósito y Ejemplo
 
-3. ¿Qué utilidad tiene la implementación de instrucciones de aritmética saturada? Dé un ejemplo con operaciones con datos de 8 bits.
+#### ¿Qué son los Sufijos?
 
-4. Describa brevemente la interfaz entre assembler y C ¿Cómo se reciben los argumentos de las funciones? ¿Cómo se devuelve el resultado? ¿Qué registros deben guardarse en la pila antes de ser modificados?
+Los sufijos en el contexto de instrucciones de ensamblador o lenguajes de programación de bajo nivel son caracteres o conjuntos de caracteres añadidos al final de las mnemotécnicas de instrucción. Estos sufijos suelen modificar o extender el comportamiento de la instrucción básica de alguna manera.
 
-5. ¿Qué es una instrucción SIMD? ¿En qué se aplican y que ventajas reporta su uso? Dé un ejemplo.
+#### Propósito
+
+Los sufijos se utilizan para varias razones, que incluyen pero no se limitan a:
+
+1. Indicar el tipo de datos con el que se trabajará (por ejemplo, byte, word, double-word).
+2. Especificar una condición bajo la cual la instrucción debe ejecutarse.
+3. Modificar cómo la instrucción afecta a los registros o flags del sistema.
+
+#### Ejemplo
+
+En el ensamblador para ARM Cortex-M, la instrucción `ADD` se puede modificar con un sufijo para actualizar los flags de estado. La instrucción `ADDS R0, R1, R2` sumará los contenidos de los registros `R1` y `R2`, almacenará el resultado en `R0`, y también actualizará los flags de estado basados en el resultado.
+
+De esta forma, los sufijos ofrecen una forma compacta y eficiente de modificar el comportamiento de las instrucciones, permitiendo una programación más flexible y optimizada.
+
+### Lista de Sufijos Comunes en Instrucciones de Ensamblador (Ejemplo para ARM Cortex-M)
+
+Aquí hay una lista de sufijos comunes que se pueden encontrar en instrucciones de ensamblador para la familia de microcontroladores ARM Cortex-M. Tenga en cuenta que los sufijos pueden variar según la arquitectura y la versión de la ISA (Instruction Set Architecture).
+
+#### Sufijos Condicionales
+
+- `EQ`: Igual (Equal)
+- `NE`: No igual (Not Equal)
+- `GT`: Mayor que (Greater Than)
+- `LT`: Menor que (Less Than)
+- `GE`: Mayor o igual que (Greater or Equal)
+- `LE`: Menor o igual que (Less or Equal)
+
+#### Sufijos de Tipo de Dato
+
+- `B`: Byte (8 bits)
+- `H`: Half-word (16 bits)
+- `W`: Word (32 bits)
+- `D`: Double-word (64 bits)
+
+#### Sufijos para Actualizar Flags
+
+- `S`: Actualizar flags de estado (por ejemplo, `ADDS` para sumar y actualizar flags)
+
+#### Sufijos de Dirección
+
+- `IA`: Incrementar después (Increment After)
+- `IB`: Incrementar antes (Increment Before)
+- `DA`: Decrementar después (Decrement After)
+- `DB`: Decrementar antes (Decrement Before)
+
+#### Sufijos para Operaciones con Punto Flotante
+
+- `F`: Indica una operación de punto flotante (por ejemplo, `ADDF` para sumar números de punto flotante)
+
+#### Sufijos para Operaciones de Cambio de Bits
+
+- `LSL`: Desplazamiento lógico a la izquierda (Logical Shift Left)
+- `LSR`: Desplazamiento lógico a la derecha (Logical Shift Right)
+- `ASR`: Desplazamiento aritmético a la derecha (Arithmetic Shift Right)
+- `ROR`: Rotación a la derecha (Rotate Right)
+
+}
+
+---
+## 2. ¿Para qué se utiliza el sufijo ‘s’? Dé un ejemplo
+
+### Uso del Sufijo 'S' en Instrucciones de Ensamblador
+
+#### ¿Qué es el Sufijo 'S'?
+
+El sufijo 'S' en el ensamblador ARM se utiliza para indicar que la instrucción debe actualizar los flags de estado en el registro de estado del programa (Program Status Register, PSR).
+
+#### Propósito
+
+Agregar el sufijo 'S' a una instrucción hace que los flags de estado como Zero (Z), Carry (C), Overflow (V) y Negative (N) se actualicen según el resultado de la operación. Esto es útil para tomar decisiones en el flujo de control del programa basándose en el resultado de una operación.
+
+#### Ejemplo
+
+La instrucción `ADDS R0, R1, R2` sumará los contenidos de los registros `R1` y `R2`, y almacenará el resultado en el registro `R0`. Además, esta instrucción actualizará los flags de estado en el PSR según el resultado de la suma. Por ejemplo, si la suma es cero, el flag Zero (Z) se establecerá.
+
+```assembly
+ADDS R0, R1, R2  ; Suma R1 + R2, almacena el resultado en R0 y actualiza los flags de estado
+```
+
+Posteriormente, puedes utilizar instrucciones condicionales como BEQ (Branch if Equal) o BNE (Branch if Not Equal) para tomar decisiones basadas en estos flags.
+
+BEQ some_label  ; Saltar a "some_label" si el resultado de la última operación con sufijo 'S' fue cero
+
+BEQ some_label  ; Saltar a "some_label" si el resultado de la última operación con sufijo 'S' fue cero
+
+
+---
+## 3. ¿Qué utilidad tiene la implementación de instrucciones de aritmética saturada? Dé un ejemplo con operaciones con datos de 8 bits.
+
+### 3. Utilidad de Instrucciones de Aritmética Saturada y Ejemplo con Datos de 8 bits
+
+#### ¿Qué es la Aritmética Saturada?
+
+La aritmética saturada es un tipo de operación aritmética en la cual todos los resultados que caen fuera del rango representable son ajustados al valor máximo o mínimo representable. En otras palabras, si una operación produce un resultado que excede el rango de datos permitido, el resultado se "satura" al valor máximo o mínimo posible.
+
+#### Utilidad
+
+La implementación de instrucciones de aritmética saturada tiene varios usos prácticos:
+
+1. **Control de Señales**: Útil en procesamiento de señales digitales donde el desbordamiento puede distorsionar la señal.
+2. **Operaciones Multimedia**: En procesamiento de imágenes y video donde el desbordamiento puede llevar a artefactos no deseados.
+3. **Seguridad**: Previene el desbordamiento aritmético que podría ser explotado en ataques de seguridad.
+4. **Facilidad de Programación**: Reduce la necesidad de manejar manualmente los casos de desbordamiento.
+
+#### Ejemplo con Datos de 8 bits
+
+Suponga que estamos trabajando con datos de 8 bits, donde el rango de enteros sin signo es de 0 a 255.
+
+```assembly
+; Usando instrucción de suma saturada en ensamblador ficticio (por ejemplo, "QADDSB" para "Saturating Add Signed Byte")
+QADDSB R0, R1, R2 ; R0 = saturar(R1 + R2)
+```
+Si R1 contiene 200 y R2 contiene 100, una suma normal resultaría en un desbordamiento. Pero con la instrucción de aritmética saturada, R0 se establecerá al valor máximo representable que es 255 en lugar de desbordar.
+
+Por lo tanto, la aritmética saturada proporciona una manera eficiente de manejar el desbordamiento y los subdesbordamientos, mejorando la robustez y la eficacia de varios tipos de aplicaciones de procesamiento de datos.
+
+
+---
+## 4. Describa brevemente la interfaz entre assembler y C ¿Cómo se reciben los argumentos de las funciones? ¿Cómo se devuelve el resultado? ¿Qué registros deben guardarse en la pila antes de ser modificados?
+
+### 4. Interfaz entre Assembler y C
+
+#### Interfaz
+
+La interfaz entre el código ensamblador y el código en C se rige generalmente por una convención de llamada a funciones que ambos respetan. Esta convención define cómo se pasan los argumentos a las funciones, cómo se devuelven los resultados y qué registros deben guardarse en la pila antes de ser modificados.
+
+#### Recepción de Argumentos
+
+- **ARM Cortex-M**: Los primeros cuatro argumentos de la función se pasan generalmente en los registros `R0`, `R1`, `R2`, y `R3`. Argumentos adicionales se pasan a través de la pila.
+
+#### Devolución de Resultados
+
+- **ARM Cortex-M**: El resultado de la función se devuelve generalmente en el registro `R0`.
+
+#### Registros que Deben Guardarse
+
+- **ARM Cortex-M**: Los registros `R4` a `R11` son registros que deben ser guardados en la pila si una función los va a modificar. Estos son considerados como registros de "callee-saved".
+
+#### Ejemplo
+
+Supongamos que tenemos la siguiente función en C:
+
+```c
+int add(int a, int b) {
+    return a + b;
+}
+```
+
+Un equivalente en ensamblador para ARM Cortex-M podría ser:
+
+
+```c
+    .globl add
+add:
+    ADDS R0, R0, R1  ; Suma R0 y R1, y guarda el resultado en R0
+    BX LR            ; Regresa al llamante
+```
+En este caso, R0 y R1 serían los registros que contienen los argumentos a y b, respectivamente. El resultado se devuelve en R0, de acuerdo con la convención de llamada.
+
+Siguiendo estas convenciones, se puede escribir código ensamblador que sea compatible con código en C, permitiendo una interacción efectiva entre los dos.
+
+---
+## 5. ¿Qué es una instrucción SIMD? ¿En qué se aplican y que ventajas reporta su uso? Dé un ejemplo.
+
+
+### Instrucción SIMD: Aplicaciones, Ventajas y Ejemplo
+
+#### ¿Qué es una Instrucción SIMD?
+
+SIMD son las siglas de "Single Instruction, Multiple Data". Este tipo de instrucción permite que una sola operación aritmética se realice en múltiples datos simultáneamente. Es decir, una única instrucción SIMD puede, por ejemplo, sumar los elementos de dos vectores en paralelo.
+
+#### Aplicaciones
+
+1. **Procesamiento de Señales**: En el filtrado digital y la transformada rápida de Fourier (FFT).
+2. **Gráficos y Multimedia**: Para acelerar las operaciones en imágenes, video y gráficos 3D.
+3. **Machine Learning**: En la aceleración de operaciones matriciales y de vectores.
+4. **Cómputo Científico**: En operaciones de álgebra lineal y otros cálculos numéricos.
+
+#### Ventajas
+
+1. **Rendimiento**: Ofrece un incremento significativo en la velocidad de procesamiento.
+2. **Eficiencia Energética**: Realiza más operaciones por ciclo de reloj, lo que puede llevar a un menor consumo de energía para ciertas operaciones.
+3. **Paralelización**: Facilita la explotación de la arquitectura de hardware paralelo.
+
+#### Ejemplo
+
+Suponga que tenemos dos vectores de 4 elementos cada uno y queremos sumarlos elemento a elemento.
+
+- Vector A: `[1, 2, 3, 4]`
+- Vector B: `[5, 6, 7, 8]`
+
+Una instrucción SIMD de suma podría tomar estos dos vectores y producir un tercer vector con los resultados `[6, 8, 10, 12]` en una sola operación.
+
+```assembly
+; Código de ensamblador ficticio para ilustrar una operación SIMD
+VADD.F32 Q0, Q1, Q2 ; Suma los elementos de los vectores en Q1 y Q2, y guarda el resultado en Q0
+```
+
+En este ejemplo ficticio, Q1 podría contener el Vector A y Q2 el Vector B. Tras la instrucción SIMD VADD.F32, Q0 contendría el vector resultante.
+
+Las instrucciones SIMD son poderosas para optimizar aplicaciones que requieren un gran número de operaciones similares ejecutadas en paralelo.
+
