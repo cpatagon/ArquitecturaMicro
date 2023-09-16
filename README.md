@@ -832,35 +832,6 @@ BEQ some_label  ; Saltar a "some_label" si el resultado de la última operación
 BEQ some_label  ; Saltar a "some_label" si el resultado de la última operación con sufijo 'S' fue cero
 
 
-### Importancia de la PSR (Program Status Register)
-
-#### ¿Qué es la PSR?
-
-La PSR (Program Status Register) es un registro especial en la arquitectura de los microcontroladores ARM Cortex-M que contiene información sobre el estado del programa en ejecución. Este registro está compuesto por varios campos que almacenan distintos tipos de información de estado, incluidos el estado de las condiciones del procesador, modos de ejecución, y otras informaciones de control.
-
-#### Campos Importantes
-
-- **N, Z, C, V**: Bits de estado de las condiciones que reflejan el resultado de las operaciones matemáticas (Negative, Zero, Carry, Overflow).
-- **I, T**: Bits para controlar las interrupciones y el modo de instrucción Thumb.
-- **M4-M0**: Bits para controlar el modo de operación (Modo privilegiado, modo de usuario, etc.).
-
-#### Importancia
-
-1. **Control de Flujo**: Los bits de estado de las condiciones permiten la implementación de estructuras de control como bucles y sentencias condicionales.
-  
-2. **Manejo de Interrupciones**: El bit de interrupción permite habilitar o deshabilitar interrupciones, lo cual es crucial para el manejo de eventos y tareas en tiempo real.
-
-3. **Modo de Ejecución**: Los bits que controlan el modo de operación permiten cambiar entre modos privilegiados y no privilegiados, lo cual es vital para la seguridad y el aislamiento en sistemas embebidos.
-
-4. **Transición de Modos**: Permite cambiar fácilmente entre modos de ejecución, como pasar de modo Thumb a modo ARM, lo cual puede tener implicaciones en la eficiencia del código.
-
-5. **Debugging y Mantenimiento**: Mantener un registro de estado permite un diagnóstico más fácil durante el debugging y ayuda en el mantenimiento del sistema.
-
----
-
-En resumen, la **PSR** es un registro fundamental en la arquitectura ARM Cortex-M que facilita la programación, el control de flujo, el manejo de interrupciones, y contribuye a la robustez y seguridad del sistema embebido.
-
-
 ---
 ## 3. ¿Qué utilidad tiene la implementación de instrucciones de aritmética saturada? Dé un ejemplo con operaciones con datos de 8 bits.
 
@@ -973,7 +944,82 @@ Una instrucción SIMD de suma podría tomar estos dos vectores y producir un ter
 VADD.F32 Q0, Q1, Q2 ; Suma los elementos de los vectores en Q1 y Q2, y guarda el resultado en Q0
 ```
 
+
 En este ejemplo ficticio, Q1 podría contener el Vector A y Q2 el Vector B. Tras la instrucción SIMD VADD.F32, Q0 contendría el vector resultante.
 
 Las instrucciones SIMD son poderosas para optimizar aplicaciones que requieren un gran número de operaciones similares ejecutadas en paralelo.
+
+---
+# OTROS
+
+## Diferencia entre Pila y Registros
+
+Tanto la pila (stack) como los registros son formas de almacenamiento de datos en un microprocesador o sistema informático, pero se utilizan de maneras muy distintas y tienen diferentes propósitos. Aquí están algunas de las diferencias clave:
+
+#### Pila (Stack)
+
+1. **Almacenamiento Temporal**: La pila se utiliza principalmente para almacenar datos de manera temporal durante la ejecución de un programa.
+  
+2. **LIFO**: Opera en un esquema LIFO (Last In, First Out), lo que significa que el último elemento que se agregó es el primero en ser retirado.
+  
+3. **Funciones y Procedimientos**: Comúnmente usada para guardar el estado del programa cuando se llama a una función o procedimiento y para almacenar variables locales.
+  
+4. **Dinámica**: La pila puede crecer y encogerse dinámicamente durante la ejecución del programa.
+  
+5. **Acceso**: Generalmente más lento que el acceso a registros debido a que está en la memoria principal.
+  
+6. **Gran Capacidad**: Puede almacenar una gran cantidad de datos en comparación con los registros.
+
+#### Registros
+
+1. **Almacenamiento de Rápido Acceso**: Los registros son pequeñas unidades de almacenamiento que están dentro del CPU para un acceso rápido.
+  
+2. **Operaciones Aritméticas**: Son utilizados para realizar operaciones aritméticas y lógicas de manera muy eficiente.
+  
+3. **Variables Globales y Estado del Procesador**: Almacenan datos que se usan con frecuencia o estado del procesador como el Program Status Register (PSR).
+  
+4. **Estáticos**: El número y tamaño de los registros es fijo y determinado por la arquitectura del CPU.
+  
+5. **Acceso**: Acceso extremadamente rápido, pero número limitado debido a su costo y complejidad.
+  
+6. **Pequeña Capacidad**: Debido a su alta velocidad y costo, los registros tienen una capacidad de almacenamiento muy limitada.
+
+#### Resumen
+
+- **Velocidad**: Los registros son más rápidos pero limitados en número y tamaño.
+- **Capacidad**: La pila tiene una gran capacidad pero es más lenta.
+- **Uso**: Los registros son óptimos para operaciones frecuentes y rápidas, mientras que la pila es mejor para almacenamiento temporal y manejo de funciones.
+
+En un programa, generalmente se utilizan ambos para diferentes propósitos, optimizando así la eficiencia y el rendimiento del sistema.
+
+
+### Importancia de la PSR (Program Status Register)
+
+#### ¿Qué es la PSR?
+
+La PSR (Program Status Register) es un registro especial en la arquitectura de los microcontroladores ARM Cortex-M que contiene información sobre el estado del programa en ejecución. Este registro está compuesto por varios campos que almacenan distintos tipos de información de estado, incluidos el estado de las condiciones del procesador, modos de ejecución, y otras informaciones de control.
+
+#### Campos Importantes
+
+- **N, Z, C, V**: Bits de estado de las condiciones que reflejan el resultado de las operaciones matemáticas (Negative, Zero, Carry, Overflow).
+- **I, T**: Bits para controlar las interrupciones y el modo de instrucción Thumb.
+- **M4-M0**: Bits para controlar el modo de operación (Modo privilegiado, modo de usuario, etc.).
+
+#### Importancia
+
+1. **Control de Flujo**: Los bits de estado de las condiciones permiten la implementación de estructuras de control como bucles y sentencias condicionales.
+  
+2. **Manejo de Interrupciones**: El bit de interrupción permite habilitar o deshabilitar interrupciones, lo cual es crucial para el manejo de eventos y tareas en tiempo real.
+
+3. **Modo de Ejecución**: Los bits que controlan el modo de operación permiten cambiar entre modos privilegiados y no privilegiados, lo cual es vital para la seguridad y el aislamiento en sistemas embebidos.
+
+4. **Transición de Modos**: Permite cambiar fácilmente entre modos de ejecución, como pasar de modo Thumb a modo ARM, lo cual puede tener implicaciones en la eficiencia del código.
+
+5. **Debugging y Mantenimiento**: Mantener un registro de estado permite un diagnóstico más fácil durante el debugging y ayuda en el mantenimiento del sistema.
+
+---
+
+En resumen, la **PSR** es un registro fundamental en la arquitectura ARM Cortex-M que facilita la programación, el control de flujo, el manejo de interrupciones, y contribuye a la robustez y seguridad del sistema embebido.
+
+
 
