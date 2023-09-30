@@ -890,7 +890,7 @@ Supongamos que tenemos la siguiente función en C:
 
 ```c
 int add(int a, int b) {
-    return a + b;
+  return a + b;
 }
 ```
 
@@ -898,7 +898,7 @@ Un equivalente en ensamblador para ARM Cortex-M podría ser:
 
 
 ```c
-    .globl add
+.globl add
 add:
     ADDS R0, R0, R1  ; Suma R0 y R1, y guarda el resultado en R0
     BX LR            ; Regresa al llamante
@@ -1020,6 +1020,156 @@ La PSR (Program Status Register) es un registro especial en la arquitectura de l
 ---
 
 En resumen, la **PSR** es un registro fundamental en la arquitectura ARM Cortex-M que facilita la programación, el control de flujo, el manejo de interrupciones, y contribuye a la robustez y seguridad del sistema embebido.
+
+
+
+
+## ¿Qué es LDR?
+
+La instrucción `LDR` (Load Register) en el lenguaje ensamblador de ARM se utiliza para cargar un valor desde la memoria y almacenarlo en un registro. Es una de las instrucciones básicas de transferencia de datos y se utiliza comúnmente para leer datos de la memoria RAM o de periféricos mapeados en memoria.
+
+#### Sintaxis
+
+La sintaxis básica de la instrucción `LDR` es la siguiente:
+
+```asm
+LDR Rd, [Rn, #offset]
+```
+
+  * Rd: Es el registro de destino donde se almacenará el valor cargado.
+  * Rn: Es el registro que contiene la dirección base de memoria.
+  * offset: Es el desplazamiento opcional para sumar a la dirección base en Rn.
+
+Ejemplo
+
+```asm
+LDR R0, [R1, #4]
+```
+
+En este ejemplo, la instrucción cargará el valor almacenado en la dirección de memoria (contenido de R1 + 4) en el registro R0.
+Uso Común
+
+ Inicialización de Variables: Cargar valores iniciales para las variables en los registros para su posterior uso.
+
+ Operaciones de Entrada/Salida: Leer datos de periféricos o dispositivos externos mapeados en memoria.
+
+ Transferencia de Datos: Mover datos entre diferentes áreas de la memoria y los registros.
+
+Ventajas
+
+ **Eficiencia:** Facilita el acceso rápido a datos que están en la memoria.
+ **Flexibilidad:** Permite diferentes modos de direccionamiento, incluido el uso de desplazamientos y modificadores.
+
+En resumen, la instrucción LDR es fundamental en la programación en ensamblador de ARM para realizar operaciones de lectura de datos desde la memoria hacia los registros del CPU.
+
+### Ejemplo Numérico de `LDR R0, [R1, #4]`
+
+Supongamos que tenemos el siguiente escenario inicial:
+
+- El registro `R1` contiene la dirección de memoria base `0x1000`.
+- En la dirección de memoria `0x1004` (que es `0x1000 + 4`), hay almacenado un valor entero, digamos `42`.
+
+#### Instrucción
+
+```asm
+LDR R0, [R1, #4]
+```
+
+Pasos
+
+  Calcular la Dirección de Memoria: Se suma el valor del desplazamiento (#4) al contenido del registro base (R1). En este caso, 0x1000 + 4 = 0x1004.
+
+ **Leer el Valor:** Se accede a la memoria en la dirección calculada (0x1004) y se lee el valor almacenado ahí. Suponemos que el valor es 42.
+
+ **Almacenar en el Registro:** Se guarda el valor leído (42) en el registro de destino R0.
+
+Resultado
+
+El registro R0 ahora contiene el valor 42.
+
+Estado Final
+
+`R0 = 42`
+ R1 = 0x1000` (sin cambios)
+Dirección de memoria `0x1004 = 42` (sin cambios)
+
+Este es un ejemplo numérico simple que muestra cómo la instrucción `LDR R0, [R1, #4]` carga el valor desde una dirección de memoria específica al registro `R0`.
+
+## Modos de direccionamiento
+###1. Direccionamiento Inmediato:
+```asm
+LDR R1, [R0]; Carga en R1 el contenido de la memoria en la dirección almacenada en R0.
+```
+###2. Direccionamiento con Offset:
+Carga en R1 el contenido de la memoria en la dirección (contenido de R0 + 4).
+```asm
+LDR R1, [R0, #4]; 
+```
+###3. Direccionamiento con Registro de Offset:
+Carga en R1 el contenido de la memoria en la dirección (contenido de R0 + contenido de R2).
+```asm
+LDR R1, [R0, R2];
+```
+###4. Direccionamiento con Escalamiento:
+Carga en R1 el contenido de la memoria en la dirección (contenido de R0 + (contenido de R2 << 2))
+```asm
+LDR R1, [R0, R2, LSL #2]; .
+```
+
+###5. Direccionamiento Post-indexado:
+
+Carga en R1 el contenido de la memoria en la dirección almacenada en R0, luego incrementa R0 por 4.
+```asm
+LDR R1, [R0], #4; 
+```
+
+###6. Direccionamiento Pre-indexado:
+Incrementa R0 por 4, luego carga en R1 el contenido de la memoria en la dirección almacenada en R0.
+```asm
+LDR R1, [R0, #4]!; 
+```
+
+## Simbolo  ```asm # ```
+
+ el símbolo ```#``` en ARM Assembly puede ser un poco confuso. El símbolo ```#``` simplemente denota un valor inmediato, es decir, un valor literal o constante que se escribe directamente en el código. Aquí hay algunos contextos en los que puedes encontrarlo y qué significa:
+1. Valor Inmediato:
+
+En instrucciones como ```mov r0, #4, el #4``` representa un valor inmediato, un número literal.
+
+assembly
+
+```asm
+mov r0, #4   ; r0 ← 4
+```
+
+
+2. Incremento/Decremento de Registro:
+
+En instrucciones como ```ldr r4, [r0], #4```, el ```#4``` significa que el registro r0 se debe incrementar en 4 después de ejecutar la instrucción.
+
+assembly
+
+```asm
+ldr r4, [r0], #4   ; Cargar el valor en la dirección apuntada por r0 en r4, luego incrementar r0 en 4.
+```
+
+3. Desplazamiento Lógico:
+
+En instrucciones como ldr r4, [r0, r2, lsl #2], el ```#2``` representa cuántos bits se deben desplazar r2 a la izquierda.
+
+assembly
+
+```asm
+ldr r4, [r0, r2, lsl #2]   ; Cargar el valor en la dirección (r0 + (r2 << 2)) en r4.
+```
+
+Resumen:
+
+    Cuando ves ```#``` seguido por un número, generalmente estás viendo un valor literal o constante.
+    Cuando el ```#``` está en el contexto de un desplazamiento o una operación aritmética, define cuánto desplazar, incrementar, o decrementar.
+
+En términos simples, el ```#``` se usa para especificar valores constantes o literales en tus instrucciones, y el contexto de la instrucción te dirá cómo se usa ese valor literal o constante.
+
 
 
 
